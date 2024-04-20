@@ -15,7 +15,7 @@ def track_word_counts(word):
 def twitter_scrapper (url,driver):
     # Set up the driver
     # Open the website
-    loadCookies(driver)
+    driver = loadCookies(driver)
     driver.get(url)
     time.sleep(5)
     div_element = driver.find_element(By.XPATH, '//div[@data-testid="tweetText"]')
@@ -49,7 +49,6 @@ if __name__ == '__main__':
     session_interval = input ("Enter the session interval in minuites: ")
     driver = webdriver.Firefox() 
     # while True: 
-    print(tweetsids,words)
     try:
         for account in accounts:
             words,tweetsids= twitter_scrapper(account,driver)

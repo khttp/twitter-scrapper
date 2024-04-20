@@ -1,4 +1,3 @@
-from dotenv import dotenv_values
 import os
 import json
 from selenium.webdriver.common.by import By
@@ -17,25 +16,25 @@ def saveCookies(driver):
 
 def loadCookies(driver):
     # Check if cookies file exists
-    if 'cookies.json' in os.listdir():
+    try:
+        if 'cookies.json' in os.listdir():
 
-        # Load cookies to a vaiable from a file
-        driver.get('https://twitter.com')
-        with open('cookies.json', 'r') as file:
-            cookies = json.load(file)
-
-        # Set stored cookies to maintain the session
-        for cookie in cookies:
-            driver.add_cookie(cookie)
-    else:
-        print('No cookies file found')
-        USER_NAME = input('USER_NAME: ')
-        PASSWORD = input('PASSWORD : ')
-        login(driver,USER_NAME,PASSWORD)# Login to Twitter
-        saveCookies(driver) # Save cookies
-    
+            # Load cookies to a vaiable from a file
+            driver.get('https://twitter.com')
+            with open('cookies.json', 'r') as file:
+                cookies = json.load(file)
+                    # Set stored cookies to maintain the session
+            for cookie in cookies:
+                driver.add_cookie(cookie)
+        else:
+            print('No cookies file found')
+            USER_NAME = input('USER_NAME: ')
+            PASSWORD = input('PASSWORD : ')
+            login(driver,USER_NAME,PASSWORD)# Login to Twitter
+    except Exception as e:
+        print(e)
     driver.refresh() # Refresh Browser after login
-
+    return driver
 # Initialize the WebDriver
 def login(driver,USER_NAME,PASSWORD):
     
