@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-from login import login , loadCookies, saveCookies
+from login import loadCookies
 
 words={}
 tweetsids = []
@@ -24,7 +24,6 @@ def twitter_scrapper (url,driver):
     tweeturl= driver.current_url
     time.sleep(1)
     tid = tweeturl.split('/')[-1]
-    print(tid)
     if not tid in tweetsids:
         for word in content:
             if word.startswith('$') and not word[1].isdigit() :
@@ -47,15 +46,20 @@ accounts=[
 if __name__ == '__main__':
     word = input ("Enter the word you want to track: ")
     session_interval = input ("Enter the session interval in minuites: ")
+    times=0
     driver = webdriver.Firefox() 
-    # while True: 
-    try:
-        for account in accounts:
-            words,tweetsids= twitter_scrapper(account,driver)
-        if word in words.keys():
-            print(f"{word} appeared {words[word]} times in the last{session_interval}.")
-        else:
-            print(f"{word} did not appear in the last {session_interval}.")
-    except Exception as e:
-        print(e)
-    # time.sleep(int(session_interval)*60)   
+    while True: 
+        try:
+            for account in accounts:
+                words,tweetsids= twitter_scrapper(account,driver)
+            if word in words.keys():
+                print(f"{word} appeared {words[word]} times in the last {session_interval+times} minutes.")
+            else:
+                print(f"{word} did not appear in the last {session_interval+times} minuites.")
+            print(f'scrap again in {session_interval+times} minutes')
+            times+=session_interval
+            time.sleep(int(session_interval)*60)   
+            
+        except Exception as e:
+            print(e)
+            break

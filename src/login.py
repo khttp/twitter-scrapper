@@ -1,8 +1,9 @@
 import os
 import json
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+from getpass import getpass
 
 def saveCookies(driver):
     # Get and store cookies after login
@@ -28,8 +29,8 @@ def loadCookies(driver):
                 driver.add_cookie(cookie)
         else:
             print('No cookies file found')
-            USER_NAME = input('USER_NAME: ')
-            PASSWORD = input('PASSWORD : ')
+            USER_NAME = getpass('USER_NAME: ')
+            PASSWORD = getpass('PASSWORD : ')
             login(driver,USER_NAME,PASSWORD)# Login to Twitter
     except Exception as e:
         print(e)
@@ -50,5 +51,7 @@ def login(driver,USER_NAME,PASSWORD):
     password_field = driver.find_element(By.XPATH,'//input[@name="password"]')
     password_field.send_keys(PASSWORD)
     password_field.send_keys(Keys.ENTER)
+    saveCookies(driver)
+    time.sleep(5)
 
     
